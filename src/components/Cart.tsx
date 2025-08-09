@@ -1,10 +1,12 @@
+// src/components/Cart.tsx
 import { useSaleStore } from '../store/useSaleStore';
 
 export default function Cart() {
   const items = useSaleStore((s) => s.items);
   const setQty = useSaleStore((s) => s.setQty);
   const removeItem = useSaleStore((s) => s.removeItem);
-  const total = items.reduce((s, i) => s + i.qty * i.price, 0);
+
+  const total = items.reduce((s, i) => s + i.qty * (i.price ?? 0), 0);
 
   if (!items.length) return null;
 
@@ -45,12 +47,13 @@ export default function Cart() {
                   +
                 </button>
               </div>
-              <div className="tabular-nums">{(i.price * i.qty).toFixed(2)}</div>
+              <div className="tabular-nums">
+                {((i.price ?? 0) * i.qty).toFixed(2)}
+              </div>
             </div>
           </div>
         ))}
       </div>
-
       <div className="flex justify-between font-semibold text-lg">
         <div>Итого</div>
         <div className="tabular-nums">{total.toFixed(2)}</div>

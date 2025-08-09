@@ -1,31 +1,28 @@
+// src/store/useSaleStore.ts
 import { create } from 'zustand';
+import type { Client, Id, Product } from '../entities/tablecrm.types';
 
-type Client = { id: string; phone: string; name?: string };
-type Item = {
-  id: string;
-  name: string;
-  price: number;
+type CartItem = Pick<Product, 'id' | 'name' | 'sku' | 'price'> & {
   qty: number;
-  sku?: string;
 };
 
 type State = {
   token: string | null;
   client: Client | null;
-  orgId: string | null;
-  warehouseId: string | null;
-  priceTypeId: string | null;
-  accountId: string | null;
-  items: Item[];
+  orgId: Id | null;
+  warehouseId: Id | null;
+  priceTypeId: Id | null;
+  accountId: Id | null;
+  items: CartItem[];
   setToken(t: string): void;
   setClient(c: Client | null): void;
-  setOrg(id: string): void;
-  setWarehouse(id: string): void;
-  setPriceType(id: string): void;
-  setAccount(id: string): void;
-  addItem(i: Omit<Item, 'qty'>): void;
-  setQty(id: string, qty: number): void;
-  removeItem(id: string): void;
+  setOrg(id: Id): void;
+  setWarehouse(id: Id): void;
+  setPriceType(id: Id): void;
+  setAccount(id: Id): void;
+  addItem(i: Omit<CartItem, 'qty'>): void;
+  setQty(id: Id, qty: number): void;
+  removeItem(id: Id): void;
   clear(): void;
 };
 

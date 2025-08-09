@@ -1,22 +1,24 @@
-export const buildSalePayload = (state: {
-  clientId: string;
-  orgId: string;
-  warehouseId: string;
-  priceTypeId: string;
-  accountId: string | null;
-  items: { id: string; qty: number; price: number }[];
-}) => {
-  const lines = state.items.map((i) => ({
-    product_id: i.id,
-    quantity: i.qty,
-    price: i.price,
-  }));
+// src/utils/buildSalePayload.ts
+import type { CreateSalePayload, Id } from '../entities/tablecrm.types';
+
+export function buildSalePayload(input: {
+  clientId: Id;
+  orgId: Id;
+  warehouseId: Id;
+  priceTypeId: Id;
+  accountId: Id | null;
+  items: { id: Id; qty: number; price: number | undefined }[];
+}): CreateSalePayload {
   return {
-    customer_id: state.clientId,
-    organization_id: state.orgId,
-    warehouse_id: state.warehouseId,
-    price_type_id: state.priceTypeId,
-    account_id: state.accountId,
-    lines,
+    customer_id: input.clientId,
+    organization_id: input.orgId,
+    warehouse_id: input.warehouseId,
+    price_type_id: input.priceTypeId,
+    account_id: input.accountId ?? undefined,
+    lines: input.items.map((i) => ({
+      product_id: i.id,
+      quantity: i.qty,
+      price: Number(i.price ?? 0),
+    })),
   };
-};
+}
